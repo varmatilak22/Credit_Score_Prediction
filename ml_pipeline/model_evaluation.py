@@ -9,7 +9,7 @@ import pandas as pd
 import os 
 def evaluation(X_test,y_test):
     #Load the model
-    model=joblib.load(os.path.join(os.path.join(os.path.dirname(os.getcwd()),'model'),'xgboost.pkl'))
+    model=joblib.load(os.path.join(os.path.dirname(__file__), 'model', 'xgboost.pkl'))
 
     #Make a predictions 
     y_pred=model.predict(X_test)

@@ -17,7 +17,7 @@ def load_model():
     """
     Load the pre-trained model and other required resources.
     """
-    model = joblib.load(os.path.join(os.path.join(os.path.dirname(os.getcwd()),'model'),'xgboost.pkl'))
+    model = joblib.load(os.path.join(os.path.dirname(__file__), 'model', 'xgboost.pkl'))
     return model
 
 model = load_model()
