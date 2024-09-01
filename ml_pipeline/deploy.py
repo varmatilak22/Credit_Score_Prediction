@@ -473,8 +473,10 @@ elif page == '📈 Evaluation':
     with st.expander("📋 View Classification Report"):
         st.write("The classification report provides a detailed performance analysis of the classification model.")
         # Display the pre-generated image of the classification report
-        img=Image.open(os.path.join(os.path.join(os.path.dirname(__file__),'assets'),'confusion_matrix.png'))
-        st.image(img, caption='Classification Report')
+        img_path=abs_image_path('classification_report.png')
+        img=Image.open(img_path)
+        st.image(img, caption='Classification Report Metrics')
+
 
     # Explanation and Display of Confusion Matrix
     st.write("#### Confusion Matrix")
@@ -487,8 +489,10 @@ elif page == '📈 Evaluation':
     with st.expander("🧩 View Confusion Matrix"):
         st.write("The confusion matrix helps to visualize the performance of the classification model.")
         # Display the pre-generated image of the confusion matrix
-        img_1=Image.open(os.path.join(os.path.join(os.path.dirname(__file__),'assets'),'confusion_matrix.png'))
-        st.image(img_1, caption='Confusion Matrix')
+        img_path=abs_image_path('confusion_matrix.png')
+        img=Image.open(img_path)
+        st.image(img, caption='Confusion Matrix')
+
 
     # Explanation and Display of AUC-ROC Curve
     st.write("#### AUC-ROC Curve")
@@ -502,8 +506,10 @@ elif page == '📈 Evaluation':
     with st.expander("📈 View AUC-ROC Curve"):
         st.write("The AUC-ROC curve shows the trade-off between sensitivity and specificity for different threshold values.")
         # Display the pre-generated image of the AUC-ROC curve
-        img_2=Image.open(os.path.join(os.path.join(os.path.dirname(__file__),'assets'),'roc_auc_curve.png'))
-        st.image(img_2, caption='AUC-ROC Curve')
+        img_path=abs_image_path('roc_auc_curve.png')
+        img=Image.open(img_path)
+        st.image(img, caption='AUC-ROC Curve')
+
 
 elif page == '⚙️ Optimization':
     
