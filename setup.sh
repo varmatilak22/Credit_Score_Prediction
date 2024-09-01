@@ -9,3 +9,4 @@ pip install shap
 pip install pandas
 pip install scikit-learn
 pip install xgboost
+pip install pillow
