@@ -1,83 +1,112 @@
+# Spam SMS Classification Project 📱🕵️‍♂️
 
-# Spam SMS Classification Project 📱🚫
 ## Overview
-This project focuses on classifying SMS messages as spam or non-spam (ham) using natural language processing (NLP) techniques. The goal is to develop machine learning models based on decision tree and random forest algorithms to automatically identify spam content in SMS messages.
+This project aims to classify SMS messages as spam or non-spam using natural language processing (NLP) and machine learning techniques. We use the `TfidfVectorizer` for text preprocessing and various machine learning algorithms to identify and categorize SMS content effectively.
 
-Project link: [https://colab.research.google.com/github/tilakrvarma22/installer/blob/main/Spam_SMS_Classification.ipynb](https://colab.research.google.com/drive/1BfWT9b20XdI0Mpvz3Cib9KM8WQiQiveo)
+Project link [Spam_SMS_Classification](https://spam-sms-classification.streamlit.app/)
 
 ## Table of Contents
-* Getting Started
-* Prerequisites
-* Installation
-* Usage
-* Data
-* NLP Techniques
-* Model Training
-* Evaluation
-* Results
-* Contributing
-* License
-* Acknowledgments
+- [Getting Started 🚀](#getting-started)
+- [Prerequisites 📋](#prerequisites)
+- [Data 📊](#data)
+- [Text Preprocessing 📝](#text-preprocessing)
+- [Model Training 🏋️‍♂️](#model-training)
+- [Evaluation 📈](#evaluation)
+- [Class Imbalance & SMOTE ⚖️](#class-imbalance--smote)
+- [Optimization 🛠️](#optimization)
+  - [Grid Search 🔍](#grid-search)
+  - [Random Search 🎲](#random-search)
+- [Real World Examples 🌍](#real-world-examples)
+- [Results 🏆](#results)
+- [Contributing 🤝](#contributing)
+- [License 📄](#license)
+- [Acknowledgments 🙏](#acknowledgments)
 
-## Getting Started
-These instructions will help you set up the project on your local machine for development and testing purposes.
+## Getting Started 🚀
+Follow these instructions to set up and run the project locally for development and testing purposes.
 
-## Prerequisites
-Make sure you have Python installed along with the necessary libraries. You can download Python from python.org and install libraries using pip.
+## Prerequisites 📋
+Ensure that you have Python installed along with the required libraries. Download Python from [python.org](https://www.python.org/) and install libraries using pip.
 
-## Data
-The dataset used for this project is available in the data directory. The main file is spam_sms_data.csv, containing text data labeled as spam or non-spam (ham).
+## Data 📊
+The dataset for this project is located in the data directory. The primary file is `sms_spam.csv`, which contains SMS messages labeled as spam or ham (non-spam). The dataset is sourced from Kaggle.
 
-## NLP Techniques
-NLP techniques such as tokenization, stemming, and TF-IDF vectorization are utilized to preprocess the text data before model training. These techniques help in transforming raw text into numerical features that can be used by machine learning algorithms.
+## Text Preprocessing 📝
+We use the `TfidfVectorizer` to preprocess SMS messages, transforming raw text into numerical features that machine learning algorithms can use.
 
-1. Bag of Words (BoW):
+1. **TF-IDF Vectorization**:
+   - **Term Frequency-Inverse Document Frequency (TF-IDF)** is a technique that converts text into numerical features based on the importance of each word in the document relative to the entire corpus.
+   - **Term Frequency (TF)** measures how often a word appears in a document.
+   - **Inverse Document Frequency (IDF)** adjusts the term frequency by how often the word appears across all documents. It reduces the weight of common words and increases the weight of rare words.
+   - **TF-IDF Score** is the product of TF and IDF, representing the importance of a word in a document.
 
-BoW creates a list of all unique words in a text and counts how many times each word appears. It represents text as a collection of word counts.
+   Example:
+   - For the message "Win a $100 gift card", TF-IDF will assign higher scores to less common words like "gift" and "card" compared to common words like "win" and "a".
 
-2. Tokenization:
+## Model Training 🏋️‍♂️
+The model training process is detailed in the `model_train.py` script. We utilize decision tree and random forest algorithms to train models on the preprocessed SMS data.
 
-Tokenization splits text into smaller units called tokens, which can be words, phrases, or other meaningful elements.
+**Decision Tree**:
+   - A popular classification model that splits the data into smaller regions based on feature values, making predictions based on these splits.
+   - Decision trees are easy to interpret and visualize, making them useful for understanding the model's decision-making process.
 
-3. Stemming:
+**Random Forest**:
+   - An ensemble learning method that combines multiple decision trees to improve accuracy and robustness.
+   - Random forests aggregate predictions from multiple trees to provide a final classification decision.
 
-Stemming reduces words to their root form by removing suffixes and prefixes.
+## Evaluation 📈
+The performance of the models is evaluated using metrics such as accuracy, precision, recall, and F1-score. Detailed results are available in the `model_evaluation.py` script.
 
-4. TF-IDF (Term Frequency-Inverse Document Frequency):
+## Class Imbalance & SMOTE ⚖️
+Spam SMS classification often faces class imbalance, where one class (e.g., spam) may be underrepresented compared to the other (e.g., ham). To address this:
 
-TF-IDF measures the importance of a word in a document relative to a collection of documents. It consists of two parts:
-Term Frequency (TF): Measures how often a word appears in a document.
-Inverse Document Frequency (IDF): Measures how unique a word is across all documents in the collection.
+1. **Class Imbalance**:
+   - Class imbalance can lead to biased models that perform poorly on the minority class.
+   - Evaluating class distribution helps in understanding the extent of imbalance.
 
-5. Count Vectorizer:
+2. **SMOTE (Synthetic Minority Over-sampling Technique)**:
+   - SMOTE generates synthetic samples to balance the class distribution.
+   - By creating new instances of the minority class, SMOTE helps the model learn better and improve classification performance.
 
-Count Vectorizer converts text documents into numerical representations by counting the occurrences of words in each document.
-6. TfidfVectorizer:
+**Visualization**:
+   - **Class Distribution Before SMOTE**: Visualize the imbalance in the dataset.
+   - **Class Distribution After SMOTE**: Show the balanced distribution post-SMOTE application.
 
-TfidfVectorizer combines the TF-IDF weighting scheme with Count Vectorizer to produce a matrix of TF-IDF features.
+## Optimization 🛠️
+We optimize our models using hyperparameter tuning techniques to enhance performance.
 
-## Model Training
-The model training process is documented in the train_and_evaluate.py script. Both decision tree and random forest algorithms are used to train models on the preprocessed text data.
+### Grid Search 🔍
+- **Grid Search** exhaustively searches through a specified range of hyperparameters to find the best combination.
+- It evaluates all possible combinations within the defined range and selects the optimal set based on performance metrics.
 
-1. Decision Tree:
-Decision trees are a popular machine learning model for classification tasks. They make predictions by recursively partitioning the feature space based on feature values.
-Each node in a decision tree represents a decision based on a feature, leading to one of the possible outcomes (classes).
-2. Random Forest:
-Random forests are an ensemble learning method that combines multiple decision trees to make predictions. Each tree in the forest is trained independently on a random subset of the training data and features.
-* Ensemble Techniques
-1. Bagging (Bootstrap Aggregating):
-Bagging involves training multiple models independently on different subsets of the training data, sampled with replacement (bootstrap samples).
-2. Boosting:
-Boosting combines multiple weak learners to create a strong learner. It trains models sequentially, where each new model focuses on examples that the previous models misclassified.
+### Random Search 🎲
+- **Random Search** samples random combinations of hyperparameters from a defined range.
+- It is often faster than Grid Search and can efficiently find good hyperparameters without exhaustive searching.
 
-## Evaluation
-The performance of the trained models is evaluated using metrics such as accuracy, precision, recall, and F1-score. Detailed information is available in the evaluation section of the train_and_evaluate.py script.
+**Visualization**:
+   - **Grid Search Optimization Results**: Display the best parameters found through Grid Search.
+   - **Random Search Optimization Results**: Show the best parameters found through Random Search.
 
-## Results
-The final trained models are saved in the models directory. You can use them to make predictions on new SMS messages.
+## Real World Examples 🌍
+Here we showcase examples of spam and non-spam SMS messages, demonstrating the model's performance in real-world scenarios.
 
-## Contributing
-If you'd like to contribute to this project, please open an issue or create a pull request. All contributions are welcome! 🙌
+1. **Example 1**: "Congratulations! You've won a $1000 gift card. Call now to claim your prize!"
+2. **Example 2**: "Hey, how are you? Let's catch up this weekend."
+3. **Example 3**: "Your account has been compromised. Click this link to secure it immediately."
+4. **Example 4**: "Are you available for a quick meeting tomorrow?"
+5. **Example 5**: "Limited time offer! Buy one get one free on all items."
 
-## License
-This project is licensed under the GECCS License - see the LICENSE file for details.
+**Visualization**:
+   - **Classification Report**: Display the classification report, showing metrics such as precision, recall, and F1-score for the real-world examples.
+
+## Results 🏆
+The trained models are saved in the models directory. You can use these models to classify new SMS messages.
+
+## Contributing 🤝
+We welcome contributions to this project! Please open an issue or create a pull request if you'd like to contribute.
+
+## License 📄
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments 🙏
+Kaggle
