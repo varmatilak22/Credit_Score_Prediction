@@ -10,6 +10,7 @@ from sklearn.inspection import partial_dependence
 from sklearn.datasets import make_classification
 import os
 from PIL import Image
+from helper import abs_image_path
 
 # Set up Streamlit page configuration
 st.set_page_config(page_title='Credit Score Prediction Dashboard')
