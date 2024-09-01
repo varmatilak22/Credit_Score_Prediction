@@ -9,8 +9,9 @@ import sqlite3
 from sklearn.preprocessing import MinMaxScaler
 import os 
 
+
 def load_data():
-    connection=sqlite3.connect(os.path.join(os.path.dirname(__file__), 'data', 'sample.db'))
+    connection=sqlite3.connect(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'sample.db'))
     
     #Using pandas to read SQL query, which includes column names 
     train_data=pd.read_sql_query('Select * from train_data;',connection)

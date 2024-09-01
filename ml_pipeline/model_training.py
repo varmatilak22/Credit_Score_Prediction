@@ -22,7 +22,7 @@ def training(X_train,y_train):
 
     model.fit(X_train,y_train)
 
-    joblib.dump(model,os.path.join(os.path.dirname(__file__), 'model', 'xgboost.pkl'))
+    joblib.dump(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'model', 'xgboost.pkl'))
     
     print("!!!Model Saved Successfully!!!")
 
@@ -47,7 +47,7 @@ if __name__=='__main__':
     training(X_train,y_train)
 
     #Load the model
-    model=joblib.load(os.path.join(os.path.dirname(__file__), 'model', 'xgboost.pkl'))
+    model=joblib.load(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'model', 'xgboost.pkl'))
 
     y_pred=model.predict(X_test)
     

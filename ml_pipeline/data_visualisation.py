@@ -9,6 +9,7 @@ import pandas as pd
 from model_evaluation import evaluation 
 import os
 
+
 def visualise_classification_report(report_df):
 
     #Visualise the classification report 
@@ -25,19 +26,19 @@ def visualise_classification_report(report_df):
     plt.title("Classification Report \n Accuracy:{:.2f}%".format(report_df.loc['accuracy','precision']*100))
     plt.xlabel('Metrics')
     plt.ylabel('Classes')
-    plt.savefig(os.path.join(os.path.dirname(__file__), 'assets', 'classification_report.png'))
+    plt.savefig(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets', 'classification_report.png'))
 
 def visualise_confusion_matrix(cm):
     #Compute and plot the confusion matrix 
     disp=ConfusionMatrixDisplay(confusion_matrix=cm,display_labels={0:'Poor',1:'Standard',2:'Good'})
     disp.plot(cmap='Blues')
     plt.title('Confusion Matrix - Credit Classes')
-    plt.savefig(os.path.join(os.path.dirname(__file__), 'assets', 'confusion_matrix.png'))
+    plt.savefig(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets', 'confusion_matrix.png'))
 
 def roc_auc_curve(X_test,y_test):
 
     #Load the model using joblin
-    model=joblib.load(os.path.join(os.path.dirname(__file__), 'model', 'xgboost.pkl'))
+    model=joblib.load(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'model', 'xgboost.pkl'))
     
     #prediction probabilities
     y_pred=model.predict_proba(X_test)
@@ -70,7 +71,7 @@ def roc_auc_curve(X_test,y_test):
     plt.title('ROC Curve - Multi-Class')
     plt.legend(loc='lower right')
     plt.grid(True)
-    plt.savefig(os.path.join(os.path.dirname(__file__), 'assets', 'roc_auc_curve.png'))
+    plt.savefig(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets', 'roc_auc_curve.png'))
 
 
 if __name__=='__main__':
@@ -94,5 +95,3 @@ if __name__=='__main__':
     visualise_classification_report(report_df)
     visualise_confusion_matrix(cm)
     roc_auc_curve(X_test,y_test)
-
-    
