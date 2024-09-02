@@ -76,19 +76,16 @@ Principal Component Analysis (PCA) is used to reduce the dimensionality of the f
 - **PCA Components**: Scree plot to visualize the explained variance by each principal component.
 
 ## Model Training 🏋️‍♂️
-The model training process involves using algorithms like logistic regression, decision tree, and random forest to learn from the preprocessed data.
+The model training process focuses on using **XGBoost** (Extreme Gradient Boosting) due to its superior performance and efficiency in handling classification tasks, especially with structured/tabular data like the one used in this project.
 
-### Logistic Regression:
-- A linear model used for classification tasks.
-- Suitable for binary and multi-class classification.
-
-### Decision Tree:
-- A tree-based model that splits data based on feature values.
-- Provides easy interpretability.
-
-### Random Forest:
-- An ensemble method that aggregates multiple decision trees.
-- Increases accuracy and robustness.
+### Why XGBoost is the Best Choice:
+- **High Accuracy**: XGBoost consistently performs well in competitions and real-world applications because it can effectively capture complex patterns in data.
+- **Handling Missing Values**: XGBoost has built-in handling for missing values, which is crucial in datasets with incomplete information.
+- **Regularization**: It includes L1 (Lasso) and L2 (Ridge) regularization techniques to prevent overfitting, making it robust against noise and irrelevant features.
+- **Scalability**: XGBoost is highly optimized for both parallel and distributed computing, making it suitable for large datasets.
+- **Tree Pruning**: Employs a unique approach to tree pruning (max_depth parameter) that optimizes computational efficiency.
+- **Flexibility**: XGBoost can handle both regression and classification tasks with binary or multi-class outputs, making it versatile for different problem types.
+- **Interpretability**: Feature importance scores can be easily extracted, aiding in the interpretability of the model results.
 
 ## Model Evaluation 📈
 The models are evaluated using various metrics, including accuracy, precision, recall, and F1-score.
