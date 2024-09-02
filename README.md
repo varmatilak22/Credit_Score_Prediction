@@ -1,112 +1,127 @@
-# Spam SMS Classification Project 📱🕵️‍♂️
+# Credit Score Prediction Project 💳📊
 
 ## Overview
-This project aims to classify SMS messages as spam or non-spam using natural language processing (NLP) and machine learning techniques. We use the `TfidfVectorizer` for text preprocessing and various machine learning algorithms to identify and categorize SMS content effectively.
+This project aims to predict credit scores (categorized as 'Good', 'Standard', and 'Poor') using machine learning techniques. The entire ML pipeline includes data extraction, cleaning, preprocessing, model training, feature selection, dimensionality reduction, and deployment using Streamlit. The project applies Mutual Information for feature selection and Principal Component Analysis (PCA) for dimensionality reduction.
 
-Project link [Spam_SMS_Classification](https://spam-sms-classification.streamlit.app/)
+Project link: [Credit_Score_Prediction](https://credit-score-prediction.streamlit.app/)
 
 ## Table of Contents
-- [Getting Started 🚀](#getting-started)
-- [Prerequisites 📋](#prerequisites)
-- [Data 📊](#data)
-- [Text Preprocessing 📝](#text-preprocessing)
-- [Model Training 🏋️‍♂️](#model-training)
-- [Evaluation 📈](#evaluation)
-- [Class Imbalance & SMOTE ⚖️](#class-imbalance--smote)
-- [Optimization 🛠️](#optimization)
-  - [Grid Search 🔍](#grid-search)
-  - [Random Search 🎲](#random-search)
-- [Real World Examples 🌍](#real-world-examples)
-- [Results 🏆](#results)
-- [Contributing 🤝](#contributing)
-- [License 📄](#license)
-- [Acknowledgments 🙏](#acknowledgments)
+- [Getting Started 🚀](#getting-started-)
+- [Prerequisites 📋](#prerequisites-)
+- [Data Extraction & Cleaning 🧹](#data-extraction--cleaning-)
+- [Data Preprocessing 📝](#data-preprocessing-)
+- [Feature Selection Using Mutual Information 📊](#feature-selection-using-mutual-information-)
+- [Dimensionality Reduction with PCA 📉](#dimensionality-reduction-with-pca-)
+- [Model Training 🏋️‍♂️](#model-training-)
+- [Model Evaluation 📈](#model-evaluation-)
+  - [Classification Report 📋](#classification-report-)
+  - [Confusion Matrix 🔢](#confusion-matrix-)
+  - [ROC and AUC Curve 📊](#roc-and-auc-curve-)
+- [Pipeline Integration 🔗](#pipeline-integration-)
+- [Model Deployment on Streamlit 🌐](#model-deployment-on-streamlit-)
+- [Real World Examples 🌍](#real-world-examples-)
+- [Results 🏆](#results-)
+- [Contributing 🤝](#contributing-)
+- [License 📄](#license-)
+- [Acknowledgments 🙏](#acknowledgments-)
 
 ## Getting Started 🚀
 Follow these instructions to set up and run the project locally for development and testing purposes.
 
 ## Prerequisites 📋
-Ensure that you have Python installed along with the required libraries. Download Python from [python.org](https://www.python.org/) and install libraries using pip.
+Ensure that you have Python installed along with the required libraries. Download Python from [python.org](https://www.python.org/) and install the libraries using pip.
 
-## Data 📊
-The dataset for this project is located in the data directory. The primary file is `sms_spam.csv`, which contains SMS messages labeled as spam or ham (non-spam). The dataset is sourced from Kaggle.
+## Data Extraction & Cleaning 🧹
+The dataset used for this project is stored in the `data` directory. The primary data file is `credit_score_data.csv`, which contains features such as `Annual_Income`, `Monthly_Inhand_Salary`, `Interest_Rate`, and others relevant to predicting credit scores.
 
-## Text Preprocessing 📝
-We use the `TfidfVectorizer` to preprocess SMS messages, transforming raw text into numerical features that machine learning algorithms can use.
+### Data Extraction:
+- Data is loaded from CSV files using Pandas.
+- Initial exploration is conducted to understand the data's structure and contents.
 
-1. **TF-IDF Vectorization**:
-   - **Term Frequency-Inverse Document Frequency (TF-IDF)** is a technique that converts text into numerical features based on the importance of each word in the document relative to the entire corpus.
-   - **Term Frequency (TF)** measures how often a word appears in a document.
-   - **Inverse Document Frequency (IDF)** adjusts the term frequency by how often the word appears across all documents. It reduces the weight of common words and increases the weight of rare words.
-   - **TF-IDF Score** is the product of TF and IDF, representing the importance of a word in a document.
+### Data Cleaning:
+- Missing values are handled using imputation techniques.
+- Outliers are detected and treated.
+- Irrelevant features are removed to streamline the dataset.
 
-   Example:
-   - For the message "Win a $100 gift card", TF-IDF will assign higher scores to less common words like "gift" and "card" compared to common words like "win" and "a".
+## Data Preprocessing 📝
+The preprocessing steps involve scaling numerical features, encoding categorical variables, and splitting the dataset into training and test sets.
+
+### Scaling:
+- Standardization is applied to numerical features to ensure all features contribute equally to the model.
+
+### Encoding:
+- Categorical variables are converted into numerical form using techniques like one-hot encoding.
+
+### Splitting the Data:
+- The dataset is split into training and testing sets using an 80-20 ratio.
+
+## Feature Selection Using Mutual Information 📊
+Feature selection is performed using Mutual Information to identify the most relevant features for predicting credit scores.
+
+### Mutual Information:
+- Measures the dependency between each feature and the target variable.
+- Helps in selecting features that provide the most information about the target.
+
+### Visualization:
+- **Top Features**: Bar plot showcasing features with the highest mutual information scores.
+
+## Dimensionality Reduction with PCA 📉
+Principal Component Analysis (PCA) is used to reduce the dimensionality of the feature space while retaining the most important information.
+
+### PCA:
+- Reduces the number of features by transforming them into a new set of uncorrelated features (principal components).
+- Helps in speeding up the model training process and reducing overfitting.
+
+### Visualization:
+- **PCA Components**: Scree plot to visualize the explained variance by each principal component.
 
 ## Model Training 🏋️‍♂️
-The model training process is detailed in the `model_train.py` script. We utilize decision tree and random forest algorithms to train models on the preprocessed SMS data.
+The model training process involves using algorithms like logistic regression, decision tree, and random forest to learn from the preprocessed data.
 
-**Decision Tree**:
-   - A popular classification model that splits the data into smaller regions based on feature values, making predictions based on these splits.
-   - Decision trees are easy to interpret and visualize, making them useful for understanding the model's decision-making process.
+### Logistic Regression:
+- A linear model used for classification tasks.
+- Suitable for binary and multi-class classification.
 
-**Random Forest**:
-   - An ensemble learning method that combines multiple decision trees to improve accuracy and robustness.
-   - Random forests aggregate predictions from multiple trees to provide a final classification decision.
+### Decision Tree:
+- A tree-based model that splits data based on feature values.
+- Provides easy interpretability.
 
-## Evaluation 📈
-The performance of the models is evaluated using metrics such as accuracy, precision, recall, and F1-score. Detailed results are available in the `model_evaluation.py` script.
+### Random Forest:
+- An ensemble method that aggregates multiple decision trees.
+- Increases accuracy and robustness.
 
-## Class Imbalance & SMOTE ⚖️
-Spam SMS classification often faces class imbalance, where one class (e.g., spam) may be underrepresented compared to the other (e.g., ham). To address this:
+## Model Evaluation 📈
+The models are evaluated using various metrics, including accuracy, precision, recall, and F1-score.
 
-1. **Class Imbalance**:
-   - Class imbalance can lead to biased models that perform poorly on the minority class.
-   - Evaluating class distribution helps in understanding the extent of imbalance.
+### Classification Report 📋
+- Provides detailed performance metrics for each class (Good, Standard, Poor).
 
-2. **SMOTE (Synthetic Minority Over-sampling Technique)**:
-   - SMOTE generates synthetic samples to balance the class distribution.
-   - By creating new instances of the minority class, SMOTE helps the model learn better and improve classification performance.
+### Confusion Matrix 🔢
+- A matrix showing the actual vs. predicted classifications.
+- Helps in understanding model errors.
 
-**Visualization**:
-   - **Class Distribution Before SMOTE**: Visualize the imbalance in the dataset.
-   - **Class Distribution After SMOTE**: Show the balanced distribution post-SMOTE application.
+### ROC and AUC Curve 📊
+- **ROC (Receiver Operating Characteristic)** curve plots the true positive rate against the false positive rate.
+- **AUC (Area Under the Curve)** measures the model's ability to distinguish between classes.
 
-## Optimization 🛠️
-We optimize our models using hyperparameter tuning techniques to enhance performance.
+## Pipeline Integration 🔗
+- The entire ML pipeline from data extraction to model training and evaluation is integrated for streamlined processing.
 
-### Grid Search 🔍
-- **Grid Search** exhaustively searches through a specified range of hyperparameters to find the best combination.
-- It evaluates all possible combinations within the defined range and selects the optimal set based on performance metrics.
-
-### Random Search 🎲
-- **Random Search** samples random combinations of hyperparameters from a defined range.
-- It is often faster than Grid Search and can efficiently find good hyperparameters without exhaustive searching.
-
-**Visualization**:
-   - **Grid Search Optimization Results**: Display the best parameters found through Grid Search.
-   - **Random Search Optimization Results**: Show the best parameters found through Random Search.
+## Model Deployment on Streamlit 🌐
+- The trained model is deployed using Streamlit for easy access and interaction.
+- Users can input new data and obtain credit score predictions in real-time.
 
 ## Real World Examples 🌍
-Here we showcase examples of spam and non-spam SMS messages, demonstrating the model's performance in real-world scenarios.
-
-1. **Example 1**: "Congratulations! You've won a $1000 gift card. Call now to claim your prize!"
-2. **Example 2**: "Hey, how are you? Let's catch up this weekend."
-3. **Example 3**: "Your account has been compromised. Click this link to secure it immediately."
-4. **Example 4**: "Are you available for a quick meeting tomorrow?"
-5. **Example 5**: "Limited time offer! Buy one get one free on all items."
-
-**Visualization**:
-   - **Classification Report**: Display the classification report, showing metrics such as precision, recall, and F1-score for the real-world examples.
+- Examples include predicting credit scores for various profiles to illustrate the model's real-world applicability.
 
 ## Results 🏆
-The trained models are saved in the models directory. You can use these models to classify new SMS messages.
+- The final trained models are saved and can be used to classify new instances of credit scores.
 
 ## Contributing 🤝
-We welcome contributions to this project! Please open an issue or create a pull request if you'd like to contribute.
+- Contributions are welcome! Please feel free to fork the repository, make your changes, and create a pull request.
 
 ## License 📄
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for more details.
 
 ## Acknowledgments 🙏
-Kaggle
+- Special thanks to data providers and open-source contributors who helped make this project possible.
