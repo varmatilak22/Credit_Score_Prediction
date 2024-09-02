@@ -476,6 +476,7 @@ elif page == '📈 Evaluation':
         # Display the pre-generated image of the classification report
         img_path=abs_image_path('classification_report.png')
         img=Image.open(img_path)
+        st.write(img_path)
         st.image(img, caption='Classification Report Metrics')
 
 
@@ -492,6 +493,7 @@ elif page == '📈 Evaluation':
         # Display the pre-generated image of the confusion matrix
         img_path=abs_image_path('confusion_matrix.png')
         img=Image.open(img_path)
+        st.write(img_path)
         st.image(img, caption='Confusion Matrix')
 
 
@@ -509,6 +511,7 @@ elif page == '📈 Evaluation':
         # Display the pre-generated image of the AUC-ROC curve
         img_path=abs_image_path('roc_auc_curve.png')
         img=Image.open(img_path)
+        st.write(img_path)
         st.image(img, caption='AUC-ROC Curve')
 
 
@@ -640,4 +643,3 @@ elif page == '🌍 Real World Examples':
     - `Streamlined loan approval`, boosting customer satisfaction.
     """, unsafe_allow_html=True)
 
-    
