@@ -18,8 +18,12 @@ st.set_page_config(page_title='Credit Score Prediction Dashboard')
 @st.cache_resource
 def load_model():
     """
-    Load the pre-trained model and other required resources.
+    Load the pre-trained XGBoost model from the 'model' directory.
+
+    Returns:
+        model: The pre-trained XGBoost model.
     """
+    # Load the model from a file
     model = joblib.load(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'model', 'xgboost.pkl'))
     return model
 
@@ -28,7 +32,13 @@ model = load_model()
 @st.cache_data
 def preprocess_features(features):
     """
-    Preprocess the features before making predictions.
+    Preprocess the input features before making predictions.
+
+    Args:
+        features (dict): Dictionary of input features.
+
+    Returns:
+        pd.DataFrame: Processed features ready for prediction.
     """
     data = pd.DataFrame([features])
     
@@ -49,39 +59,53 @@ def preprocess_features(features):
 def predict(features):
     """
     Predict the credit score class using the pre-trained model.
+
+    Args:
+        features (dict): Dictionary of input features.
+
+    Returns:
+        np.ndarray: The predicted class for the input features.
     """
     feature_processed = preprocess_features(features)
     prediction = model.predict(feature_processed)
     return prediction
 
-#Global Declarations
+# Global Declarations
 credit_score_class = {
-        0: "Poor Credit Score",
-        1: "Standard Credit Score",
-        2: "Good Credit Score"
+    0: "Poor Credit Score",
+    1: "Standard Credit Score",
+    2: "Good Credit Score"
 }
-    
+
 class_details = {
-        0: [
-            "High credit risk due to multiple delayed payments.",
-            "High outstanding debt and insufficient credit history.",
-            "Consider improving payment habits and reducing debt."
-        ],
-        1: [
-            "Moderate credit risk with some delayed payments.",
-            "Maintain timely payments and monitor credit inquiries.",
-            "Keep a low credit utilization and manage debts responsibly."
-        ],
-        2: [
-            "Low credit risk with timely payments and low debt.",
-            "Excellent credit history with responsible financial management.",
-            "Continue managing finances well to maintain this rating."
-        ]
+    0: [
+        "High credit risk due to multiple delayed payments.",
+        "High outstanding debt and insufficient credit history.",
+        "Consider improving payment habits and reducing debt."
+    ],
+    1: [
+        "Moderate credit risk with some delayed payments.",
+        "Maintain timely payments and monitor credit inquiries.",
+        "Keep a low credit utilization and manage debts responsibly."
+    ],
+    2: [
+        "Low credit risk with timely payments and low debt.",
+        "Excellent credit history with responsible financial management.",
+        "Continue managing finances well to maintain this rating."
+    ]
 }
-    
+
 def generate_html_report(user_details, features, prediction):
     """
     Generate an HTML report based on user details, features, and prediction.
+
+    Args:
+        user_details (dict): Dictionary containing user details.
+        features (dict): Dictionary of input features.
+        prediction (np.ndarray): The predicted class for the input features.
+
+    Returns:
+        str: HTML content of the report.
     """
     prediction_class = credit_score_class.get(prediction[0], "Unknown")
     details = class_details.get(prediction[0], ["No details available."])
@@ -174,7 +198,7 @@ st.write("Welcome to the Credit Score Prediction Dashboard. This app allows you 
 
 # Navigation sidebar
 st.sidebar.title('📑 Navigation')
-page = st.sidebar.radio('Select a Page:', ['🔮 Predictions', '🔍 Model Explanation', '📉 Feature Selection', '📈 Evaluation', '⚙️ Optimization', '🌍 Real World Examples',])
+page = st.sidebar.radio('Select a Page:', ['🔮 Predictions', '🔍 Model Explanation', '📉 Feature Selection', '📈 Evaluation', '⚙️ Optimization', '🌍 Real World Examples'])
 
 # Page to make predictions
 if page == '🔮 Predictions':
@@ -184,13 +208,14 @@ if page == '🔮 Predictions':
     with tab1:
         st.write("### Enter Your Details")
 
+        # Input fields for user details
         name = st.text_input("Name:")
         age = st.number_input("Age:", min_value=18, max_value=100, value=30)
         occupation = st.text_input("Occupation:")
-
         address = st.text_area("Address:")
         mobile = st.text_input("Mobile Number:")
 
+        # Save user details and proceed to predictions
         if st.button('Proceed to Predictions'):
             if name and age and occupation and address and mobile:
                 st.session_state['user_details'] = {
@@ -206,6 +231,8 @@ if page == '🔮 Predictions':
 
     with tab2:
         st.write("### Credit Score Predictions Section")
+
+        # Display user details if available
         if 'user_details' in st.session_state:
             user_details = st.session_state['user_details']
             st.write(f"**Name:** {user_details['name']}")
@@ -215,6 +242,7 @@ if page == '🔮 Predictions':
             st.write(f"**Mobile Number:** {user_details['mobile']}")
             st.write("---")
     
+        # Input fields for credit score prediction
         st.write('Enter the following details to predict your credit score:')
 
         col1, col2 = st.columns(2)
@@ -231,6 +259,7 @@ if page == '🔮 Predictions':
             g = st.number_input('Outstanding Debt:', min_value=0, value=10000, step=500)
             h = st.number_input('Total EMI per Month:', min_value=0, value=200, step=10)
             
+        # Collect feature inputs for prediction
         features = {
             'Annual_Income': a,
             'Monthly_Inhand_Salary': b,
@@ -242,6 +271,7 @@ if page == '🔮 Predictions':
             'Total_EMI_per_month': h,
         }
 
+        # Predict and display the result
         if st.button('Get Prediction'):
             prediction = predict(features)
             st.session_state['prediction'] = prediction
@@ -253,6 +283,7 @@ if page == '🔮 Predictions':
     with tab3:
         st.write("### Download Report")
     
+        # Generate and download the report if details and prediction are available
         if 'user_details' in st.session_state and 'prediction' in st.session_state:
             user_details = st.session_state['user_details']
             prediction = st.session_state['prediction']
@@ -285,9 +316,9 @@ elif page == '🔍 Model Explanation':
         """
         XGBoost builds an `ensemble` of decision trees through a process called `boosting`. Boosting involves sequentially training models where each model corrects the errors of the previous one. The main steps are:
         
-        * `Initialization`: Start with an initial prediction, often the mean of the target values.</li>
-        * `Iterative Improvement`: In each iteration, a new decision tree is trained to predict the errors of the previous trees.</li>
-        * `Combination`: The predictions from all trees are combined to make the final prediction, usually by taking a weighted average.</li>
+        * `Initialization`: Start with an initial prediction, often the mean of the target values.
+        * `Iterative Improvement`: In each iteration, a new decision tree is trained to predict the errors of the previous trees.
+        * `Combination`: The predictions from all trees are combined to make the final prediction, usually by taking a weighted average.
         """, unsafe_allow_html=True
     )
 
@@ -352,7 +383,7 @@ elif page == '🔍 Model Explanation':
         """
         <h3>Why Use XGBoost?</h3>
 
-        XGBoost is often the `go-to algorithm`for many machine learning tasks due to its balance of performance and speed. It’s especially useful in scenarios where accuracy is crucial and where you have large amounts of data.
+        XGBoost is often the `go-to algorithm` for many machine learning tasks due to its balance of performance and speed. It’s especially useful in scenarios where accuracy is crucial and where you have large amounts of data.
         
         Overall, XGBoost's combination of advanced features and efficiency makes it a preferred choice for many `data scientists` and `machine learning practitioners`.
         """, unsafe_allow_html=True
@@ -360,8 +391,9 @@ elif page == '🔍 Model Explanation':
     
 elif page == '📉 Feature Selection':
     # Feature Selection Section
-    st.header('🔍 Feature Selection')
+    st.header('🔍 Feature Selection')  # Set the header for the Feature Selection page.
 
+    # Display a description of Mutual Information (MI) and its role in feature selection.
     st.markdown(
     """
     `Mutual Information (MI)` measures the dependency between two variables. 
@@ -371,29 +403,32 @@ elif page == '📉 Feature Selection':
     """, unsafe_allow_html=True
     )
 
+    # Title for the feature importance visualization section.
     st.write("### Feature Importance Visualization Based on MI")
 
-    # Example MI scores and features
+    # Example feature names for visualization.
     features = ['Annual_Income', 'Monthly_Inhand_Salary', 'Interest_Rate', 'Delay_from_due_date', 
             'Num_Credit_Inquiries', 'Credit_Mix', 'Outstanding_Debt', 
             'Total_EMI_per_month']  # Example feature names
 
-    mi_scores = [ 0.56, 0.55, 0.18, 0.12, 0.12,  0.14, 0.57, 0.53]  # Example MI scores
+    # Example MI scores corresponding to the features.
+    mi_scores = [0.56, 0.55, 0.18, 0.12, 0.12, 0.14, 0.57, 0.53]  # Example MI scores
 
-    # Creating a DataFrame for MI scores
+    # Creating a DataFrame to hold feature names and their MI scores.
     mi_df = pd.DataFrame({'Feature': features, 'MI Score': mi_scores})
-    mi_df = mi_df.sort_values(by='MI Score', ascending=False)
+    mi_df = mi_df.sort_values(by='MI Score', ascending=False)  # Sort features by MI score in descending order.
 
-    # Plotting Mutual Information Scores
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x='MI Score', y='Feature', data=mi_df, palette='viridis', ax=ax)
-    ax.set_title('Mutual Information Scores for Features')
-    ax.set_xlabel('MI Score')
-    ax.set_ylabel('Feature')
+    # Plotting the Mutual Information Scores.
+    fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axis for the plot.
+    sns.barplot(x='MI Score', y='Feature', data=mi_df, palette='viridis', ax=ax)  # Create a bar plot using seaborn.
+    ax.set_title('Mutual Information Scores for Features')  # Set the title of the plot.
+    ax.set_xlabel('MI Score')  # Label for the x-axis.
+    ax.set_ylabel('Feature')  # Label for the y-axis.
 
-    # Display the plot in Streamlit
+    # Display the plot in the Streamlit app.
     st.pyplot(fig)
 
+    # Provide an explanation of the bar chart and its implications.
     st.markdown(
     """
     The bar chart above visualizes the `Mutual Information` scores for each feature. 
@@ -402,18 +437,19 @@ elif page == '📉 Feature Selection':
     )
 
 elif page == '📈 Evaluation':
-    # Sample data and model evaluation section
-    st.header('📊 Model Evaluation Metrics')
+    # Model Evaluation Metrics Section
+    st.header('📊 Model Evaluation Metrics')  # Set the header for the Model Evaluation Metrics page.
 
+    # Display a description of the key metrics used for evaluating a classification model.
     st.markdown(
     """
     When evaluating a classification model, it's important to use several metrics to understand how well the model performs. 
-    The key metrics used are `Accuracy`, `Precision`,`Recall`, and `F1-Score`.
+    The key metrics used are `Accuracy`, `Precision`, `Recall`, and `F1-Score`.
     Additionally, we use the `Confusion Matrix` and the `AUC-ROC Curve` to visualize the model's performance.
     """, unsafe_allow_html=True
     )
 
-    # Explanation of Confusion Matrix and Metrics
+    # Explanation of the Confusion Matrix.
     st.write("### What is a Confusion Matrix?")
     st.markdown(
     """
@@ -429,8 +465,10 @@ elif page == '📈 Evaluation':
     """, unsafe_allow_html=True
     ) 
 
-    # Formulas for Evaluation Metrics
+    # Formulas and explanations for key evaluation metrics.
     st.write("### Formulas for Evaluation Metrics")
+    
+    # Accuracy formula
     st.markdown(
     """
     * `Accuracy`: Measures the ratio of correctly predicted observations to the total observations.</li>
@@ -438,6 +476,7 @@ elif page == '📈 Evaluation':
     )
     st.latex(r"Accuracy = \frac{TP + TN}{TP + TN + FP + FN}")
 
+    # Precision formula
     st.markdown(
     """
     * `Precision`: The ratio of correctly predicted positive observations to the total predicted positives.</li>
@@ -445,6 +484,7 @@ elif page == '📈 Evaluation':
     )
     st.latex(r"Precision = \frac{TP}{TP + FP}")
 
+    # Recall formula
     st.markdown(
     """
     * `Recall (Sensitivity)`: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
@@ -452,6 +492,7 @@ elif page == '📈 Evaluation':
     )
     st.latex(r"Recall = \frac{TP}{TP + FN}")
 
+    # F1-Score formula
     st.markdown(
     """
     * `F1-Score`: The weighted average of Precision and Recall. It is more useful than accuracy especially when you have an uneven class distribution.</li>
@@ -459,10 +500,10 @@ elif page == '📈 Evaluation':
     )
     st.latex(r"F1\text{-}Score = 2 \times \frac{Precision \times Recall}{Precision + Recall}")
 
-    # Displaying the Classification Report, Confusion Matrix, and AUC-ROC Curve
+    # Section for displaying various model evaluation visualizations.
     st.write("### Model Evaluation Visualizations")
 
-    # Explanation and Display of Classification Report
+    # Classification Report section.
     st.write("#### Classification Report")
     st.markdown(
     """
@@ -471,16 +512,15 @@ elif page == '📈 Evaluation':
     """, unsafe_allow_html=True 
     )
 
+    # Expandable section to view the Classification Report image.
     with st.expander("📋 View Classification Report"):
         st.write("The classification report provides a detailed performance analysis of the classification model.")
-        # Display the pre-generated image of the classification report
-        img_path=abs_image_path('classification_report.png')
-        img=Image.open(img_path)
-        #st.write(img_path)
-        st.image(img, caption='Classification Report Metrics')
+        # Display the pre-generated image of the classification report.
+        img_path = abs_image_path('classification_report.png')  # Get the path to the image.
+        img = Image.open(img_path)  # Open the image.
+        st.image(img, caption='Classification Report Metrics')  # Display the image with a caption.
 
-
-    # Explanation and Display of Confusion Matrix
+    # Confusion Matrix section.
     st.write("#### Confusion Matrix")
     st.markdown(
     """
@@ -488,16 +528,16 @@ elif page == '📈 Evaluation':
     This visualization helps in identifying misclassifications and understanding which classes are more frequently misclassified.
     """, unsafe_allow_html=True
     )
+
+    # Expandable section to view the Confusion Matrix image.
     with st.expander("🧩 View Confusion Matrix"):
         st.write("The confusion matrix helps to visualize the performance of the classification model.")
-        # Display the pre-generated image of the confusion matrix
-        img_path=abs_image_path('confusion_matrix.png')
-        img=Image.open(img_path)
-        #st.write(img_path)
-        st.image(img, caption='Confusion Matrix')
+        # Display the pre-generated image of the confusion matrix.
+        img_path = abs_image_path('confusion_matrix.png')  # Get the path to the image.
+        img = Image.open(img_path)  # Open the image.
+        st.image(img, caption='Confusion Matrix')  # Display the image with a caption.
 
-
-    # Explanation and Display of AUC-ROC Curve
+    # AUC-ROC Curve section.
     st.write("#### AUC-ROC Curve")
     st.markdown(
     """
@@ -505,19 +545,17 @@ elif page == '📈 Evaluation':
     It tells how much the model is capable of distinguishing between classes. The closer the AUC value is to 1, the better the model's performance.
     """, unsafe_allow_html=True 
     )
-    
+
+    # Expandable section to view the AUC-ROC Curve image.
     with st.expander("📈 View AUC-ROC Curve"):
         st.write("The AUC-ROC curve shows the trade-off between sensitivity and specificity for different threshold values.")
-        # Display the pre-generated image of the AUC-ROC curve
-        img_path=abs_image_path('roc_auc_curve.png')
-        img=Image.open(img_path)
-        #st.write(img_path)
-        st.image(img, caption='AUC-ROC Curve')
-
+        # Display the pre-generated image of the AUC-ROC curve.
+        img_path = abs_image_path('roc_auc_curve.png')  # Get the path to the image.
+        img = Image.open(img_path)  # Open the image.
+        st.image(img, caption='AUC-ROC Curve')  # Display the image with a caption.
 
 elif page == '⚙️ Optimization':
-    
-    # Introduction to Optimization Techniques
+    # Optimization Techniques Section
     st.write("### Hyperparameter Optimization Techniques")
     st.markdown(
         """
@@ -574,12 +612,14 @@ elif page == '⚙️ Optimization':
         - Enhances `predictive power` and stability.
         """, unsafe_allow_html=True
     )
+
 elif page == '🌍 Real World Examples':
+    # Real World Examples Section
     st.header('🌍 Real World Examples')
 
     st.write("#### Real-Time Performance prediction")
 
-    # Example data for 10 individuals with a mix of classes
+    # Creating example data for 10 individuals with their credit scores
     example_data = pd.DataFrame({
         'Name': ['John Doe', 'Emily Smith', 'Sarah Johnson', 'Michael Brown', 'Lisa White', 
                  'Tom Green', 'Nancy Davis', 'George Wilson', 'Olivia Clark', 'Sophia Martinez'],
@@ -607,7 +647,7 @@ elif page == '🌍 Real World Examples':
                                 320, 680, 420, 520, 620],
         })
 
-    # Setting the 'Name' column as the index
+    # Setting the 'Name' column as the index for better readability
     example_data.set_index('Name', inplace=True)
 
     st.write("**Example Data for Prediction:**")
@@ -625,7 +665,6 @@ elif page == '🌍 Real World Examples':
     # Display the table with real-time data and color for predicted credit scores
     st.dataframe(example_data.style.applymap(color_predicted_score, subset=['Predicted Credit Score']))
 
-
     st.write("### Applications")
     st.write("""
     The credit score prediction model is valuable in:
@@ -642,4 +681,3 @@ elif page == '🌍 Real World Examples':
     - `Offered personalized advice` based on predicted credit scores.
     - `Streamlined loan approval`, boosting customer satisfaction.
     """, unsafe_allow_html=True)
-
