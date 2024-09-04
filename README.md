@@ -3,7 +3,7 @@
 ## Overview
 This project aims to predict credit scores (categorized as 'Good', 'Standard', and 'Poor') using machine learning techniques. The entire ML pipeline includes data extraction, cleaning, preprocessing, model training, feature selection, dimensionality reduction, and deployment using Streamlit. The project applies Mutual Information for feature selection and Principal Component Analysis (PCA) for dimensionality reduction.
 
-Project link: [Credit_Score_Prediction](https://credit-score-prediction.streamlit.app/)
+Project link: [Credit_Score_Prediction](https://credit-score-predict.streamlit.app/)
 
 ## Table of Contents
 - [Getting Started 🚀](#getting-started-)
