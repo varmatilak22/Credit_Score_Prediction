@@ -46,5 +46,5 @@ if __name__ == '__main__':
     test_data_pre = test_data_pre.drop(unselected_feature, axis=1)
     
     # Print remaining columns and their count
-    #print(train_data_pre.columns)
+    print(train_data_pre.columns)
     #print(len(train_data_pre))
