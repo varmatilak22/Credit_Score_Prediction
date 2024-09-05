@@ -13,7 +13,7 @@ from PIL import Image
 from helper import abs_image_path
 
 # Set up Streamlit page configuration
-st.set_page_config(page_title='Credit Score Prediction Dashboard')
+st.set_page_config(page_title='Credit Score Prediction Dashboard',layout="wide")
 
 @st.cache_resource
 def load_model():
