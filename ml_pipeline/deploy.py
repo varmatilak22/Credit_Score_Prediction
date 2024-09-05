@@ -314,7 +314,7 @@ elif page == '🔍 Exploratory Data Analysis (EDA)':
 
     # Embed the report using an iframe
     # Read the report HTML file
-    report_path = 'report.html'
+    report_path = os.path.join(os.path.dirname(__file__),'report.html')
     with open(report_path, 'r', encoding='utf-8') as file:
         html_content = file.read()
 
