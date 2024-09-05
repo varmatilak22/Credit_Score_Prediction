@@ -38,13 +38,13 @@ if __name__ == '__main__':
     mi_info = mutual_information(train_data_pre, y_encode)
 
     # Identify features with mutual information less than the threshold
-    unselected_feature = mi_info[mi_info['Mutual_Information'] < 0.11]['Features']
-    print(len(unselected_feature))
+    unselected_feature = mi_info[mi_info['Mutual_Information'] <0.11]['Features']
+    print(unselected_feature)
 
     # Drop features with mutual information below the threshold from the training and testing datasets
     train_data_pre = train_data_pre.drop(unselected_feature, axis=1)
     test_data_pre = test_data_pre.drop(unselected_feature, axis=1)
     
     # Print remaining columns and their count
-    print(train_data_pre.columns)
-    print(len(train_data_pre))
+    #print(train_data_pre.columns)
+    #print(len(train_data_pre))

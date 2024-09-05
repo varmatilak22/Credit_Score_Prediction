@@ -10,3 +10,4 @@ seaborn
 imblearn
 xgboost
 pillow
+ydata-profiling

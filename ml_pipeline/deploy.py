@@ -70,6 +70,7 @@ def predict(features):
     prediction = model.predict(feature_processed)
     return prediction
 
+
 # Global Declarations
 credit_score_class = {
     0: "Poor Credit Score",
@@ -198,7 +199,7 @@ st.write("Welcome to the Credit Score Prediction Dashboard. This app allows you 
 
 # Navigation sidebar
 st.sidebar.title('📑 Navigation')
-page = st.sidebar.radio('Select a Page:', ['🔮 Predictions', '🔍 Model Explanation', '📉 Feature Selection', '📈 Evaluation', '⚙️ Optimization', '🌍 Real World Examples'])
+page = st.sidebar.radio('Select a Page:', ['🔮 Predictions','🔍 Exploratory Data Analysis (EDA)', '🔍 Model Explanation', '📉 Feature Selection', '📈 Evaluation', '⚙️ Optimization', '🌍 Real World Examples'])
 
 # Page to make predictions
 if page == '🔮 Predictions':
@@ -301,6 +302,24 @@ if page == '🔮 Predictions':
             )
         else:
             st.error("Please complete the previous steps to generate the report.")
+
+elif page == '🔍 Exploratory Data Analysis (EDA)':
+    # EDA Section
+    st.header('🔍 Exploratory Data Analysis (EDA)')
+    st.markdown(
+        """
+        The following is the profiling report for the first 50,000 samples of the credit score dataset. This report provides detailed insights into the data, including statistics, distributions, and correlations.
+        """, unsafe_allow_html=True
+    )
+
+    # Embed the report using an iframe
+    # Read the report HTML file
+    report_path = 'report.html'
+    with open(report_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+
+    # Display the report using st.components.v1.html()
+    st.components.v1.html(html_content, height=800, scrolling=True)
 
 elif page == '🔍 Model Explanation':
     st.title("Understanding XGBoost")

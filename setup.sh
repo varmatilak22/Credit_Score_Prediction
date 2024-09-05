@@ -10,3 +10,4 @@ pip install pandas
 pip install scikit-learn
 pip install xgboost
 pip install pillow
+pip install ydata-profiling
