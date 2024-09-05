@@ -308,7 +308,7 @@ elif page == '🔍 Exploratory Data Analysis (EDA)':
     st.header('🔍 Exploratory Data Analysis (EDA)')
     st.markdown(
         """
-        The following is the profiling report for the first 50,000 samples of the credit score dataset. This report provides detailed insights into the data, including statistics, distributions, and correlations.
+        The following is the profiling report for the first 5,000 samples of the credit score dataset. This report provides detailed insights into the data, including statistics, distributions, and correlations.
         """, unsafe_allow_html=True
     )
 
